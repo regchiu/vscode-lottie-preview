@@ -1,0 +1,164 @@
+import * as vscode from 'vscode'
+import { posix } from 'path'
+
+
+export function activate(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand('lottie-preview.open', () => {
+      LottieViewerPanel.show(context.extensionUri)
+    })
+  )
+}
+
+
+class LottieViewerPanel {
+  /**
+   * Track the currently panel. Only allow a single panel to exist at a time.
+   */
+  public static currentPanel?: LottieViewerPanel
+
+  public static readonly viewType = 'lottie-preview'
+  private readonly _panel: vscode.WebviewPanel
+  private readonly _extensionUri: vscode.Uri
+
+  private _disposables: vscode.Disposable[] = []
+
+  private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+    this._panel = panel
+    this._extensionUri = extensionUri
+    this._panel.iconPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'images', 'lottie-logo.png')
+
+    // Set the webview's initial html content
+    this._update()
+
+    // Listen for when the panel is disposed
+    // This happens when the user closes the panel or when the panel is closed programmatically
+    this._panel.onDidDispose(() => this.dispose(), null, this._disposables)
+
+    // Handle messages from the webview
+    this._panel.webview.onDidReceiveMessage(
+      message => {
+        switch (message.command) {
+          case 'alert':
+            vscode.window.showErrorMessage(message.text)
+            return
+        }
+      },
+      null,
+      this._disposables
+    )
+
+    vscode.window.onDidChangeActiveTextEditor((event?:vscode.TextEditor) => {
+      if (event?.document.languageId === 'json') {
+        this._update()
+      }
+    },null, this._disposables)
+  }
+
+  public static show(extensionUri: vscode.Uri) {
+    if (
+      !vscode.window.activeTextEditor
+    || posix.extname(vscode.window.activeTextEditor.document.uri.path) !== '.json'
+    ) {
+      return vscode.window.showInformationMessage('Open a Lottie file first')
+    }
+
+    const column = vscode.window.activeTextEditor.viewColumn
+
+    // If we already have a panel, show it.
+    if (LottieViewerPanel.currentPanel) {
+      LottieViewerPanel.currentPanel._panel.reveal(column)
+      return
+    }
+    
+    const panel = vscode.window.createWebviewPanel(
+      LottieViewerPanel.viewType,
+      'Lottie Viewer',
+      vscode.ViewColumn.Beside,
+      getWebviewOptions()
+    )
+    
+    LottieViewerPanel.currentPanel = new LottieViewerPanel(panel, extensionUri)
+  }
+
+  public dispose() {
+    LottieViewerPanel.currentPanel = undefined
+
+    // Clean up our resources
+    this._panel.dispose()
+
+    while (this._disposables.length) {
+      const x = this._disposables.pop()
+      if (x) {
+        x.dispose()
+      }
+    }
+  }
+
+  private _update() {  
+    const webview = this._panel.webview
+    const jsonUri = vscode.window.activeTextEditor!.document.uri
+
+    this._updateForFile(webview, jsonUri)
+  }
+
+  private _updateForFile(webview: vscode.Webview, jsonUri: vscode.Uri) {
+    const fileName = posix.basename(jsonUri.path)
+
+    this._panel.title = `Lottie Preview | ${fileName}`
+    this._panel.webview.html = this._getHtmlForWebview(webview, jsonUri)
+  }
+
+  private _getHtmlForWebview(webview: vscode.Webview, jsonUri: vscode.Uri) {
+    // Get resource paths
+    const stylesUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css'))
+    const lottiePlayerScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', '@lottiefiles', 'lottie-player', 'dist', 'lottie-player.js'))
+    const lottieFileUri = webview.asWebviewUri(jsonUri)
+
+    const nonce = getNonce()
+
+    return `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+
+        <!--
+          Use a content security policy to only allow loading specific resources in the webview
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https: data:; script-src 'nonce-${nonce}'; connect-src ${webview.cspSource} https:; script-src-elem https:;">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lottie Viewer</title>
+
+        <link href=${stylesUri} rel="stylesheet" />
+      </head>
+      <body>
+        <lottie-player
+          autoplay
+          controls
+          loop
+          mode="normal"
+          src="${lottieFileUri}"
+        />
+        <script nonce="${nonce}" src="${lottiePlayerScriptUri}"></script>
+      </body>
+      </html>`
+  }
+}
+
+function getWebviewOptions(): vscode.WebviewOptions {
+  return {
+    // Enable javascript in the webview
+    enableScripts: true
+  }
+}
+
+function getNonce() {
+  let text = ''
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  for (let i = 0; i < 32; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
+  }
+  return text
+}
+

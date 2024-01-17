@@ -1,0 +1,9 @@
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgba: 249, 251, 255, 1;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgba));
+}
