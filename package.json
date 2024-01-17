@@ -11,6 +11,9 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "lottie"
+  ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
