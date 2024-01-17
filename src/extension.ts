@@ -4,7 +4,7 @@ import { posix } from 'path'
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
-    vscode.commands.registerCommand('lottie-preview.open', () => {
+    vscode.commands.registerCommand('vscode-lottie-preview.open', () => {
       LottieViewerPanel.show(context.extensionUri)
     })
   )
@@ -17,7 +17,7 @@ class LottieViewerPanel {
    */
   public static currentPanel?: LottieViewerPanel
 
-  public static readonly viewType = 'lottie-preview'
+  public static readonly viewType = 'vscode-lottie-preview'
   private readonly _panel: vscode.WebviewPanel
   private readonly _extensionUri: vscode.Uri
 
@@ -77,7 +77,7 @@ class LottieViewerPanel {
       vscode.ViewColumn.Beside,
       getWebviewOptions()
     )
-    
+
     LottieViewerPanel.currentPanel = new LottieViewerPanel(panel, extensionUri)
   }
 
@@ -105,7 +105,7 @@ class LottieViewerPanel {
   private _updateForFile(webview: vscode.Webview, jsonUri: vscode.Uri) {
     const fileName = posix.basename(jsonUri.path)
 
-    this._panel.title = `Lottie Preview | ${fileName}`
+    this._panel.title = `VSCode Lottie Preview | ${fileName}`
     this._panel.webview.html = this._getHtmlForWebview(webview, jsonUri)
   }
 
