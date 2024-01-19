@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { posix } from 'path'
-
+import { Animation } from '@lottiefiles/lottie-js'
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -48,9 +48,18 @@ class LottieViewerPanel {
       this._disposables
     )
 
-    vscode.window.onDidChangeActiveTextEditor((event?:vscode.TextEditor) => {
-      if (event?.document.languageId === 'json') {
-        this._update()
+    vscode.window.onDidChangeActiveTextEditor(async(event?:vscode.TextEditor) => {
+      if (event) {
+        const text = event.document.getText()
+        let isLottie = false
+
+        if (isJson(text)) {
+          isLottie = Animation.isLottie(JSON.parse(text))
+        }
+
+        if (event.document.languageId === 'json' && isLottie) {
+          this._update()
+        }
       }
     },null, this._disposables)
   }
@@ -95,7 +104,7 @@ class LottieViewerPanel {
     }
   }
 
-  private _update() {  
+  private async _update() {  
     const webview = this._panel.webview
     const jsonUri = vscode.window.activeTextEditor!.document.uri
 
@@ -151,6 +160,15 @@ function getWebviewOptions(): vscode.WebviewOptions {
     // Enable javascript in the webview
     enableScripts: true
   }
+}
+
+function isJson(str: string): boolean {
+  try {
+    JSON.parse(str)
+  } catch (error) {
+    return false
+  }
+  return true
 }
 
 function getNonce() {
