@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import { posix } from 'path'
 import { Animation } from '@lottiefiles/lottie-js'
+import { getNonce, isJson } from './utils'
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -61,7 +62,10 @@ class LottieViewerPanel {
           this._update()
         }
       }
-    },null, this._disposables)
+    },
+    null,
+    this._disposables
+    )
   }
 
   public static show(extensionUri: vscode.Uri) {
@@ -160,23 +164,5 @@ function getWebviewOptions(): vscode.WebviewOptions {
     // Enable javascript in the webview
     enableScripts: true
   }
-}
-
-function isJson(str: string): boolean {
-  try {
-    JSON.parse(str)
-  } catch (error) {
-    return false
-  }
-  return true
-}
-
-function getNonce() {
-  let text = ''
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  for (let i = 0; i < 32; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
-  }
-  return text
 }
 
