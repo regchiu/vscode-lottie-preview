@@ -1,14 +1,23 @@
 import * as vscode from 'vscode'
 import { posix } from 'path'
-import { Animation } from '@lottiefiles/lottie-js'
-import { getNonce, isJson } from './utils'
+import { getNonce, isLottie } from './utils'
 
 export function activate(context: vscode.ExtensionContext) {
+  vscode.commands.executeCommand('setContext', 'isLottie', isLottie(vscode.window.activeTextEditor))
+
   context.subscriptions.push(
     vscode.commands.registerCommand('vscode-lottie-preview.open', () => {
       LottieViewerPanel.show(context.extensionUri)
     })
   )
+
+  vscode.window.onDidChangeActiveTextEditor((event?:vscode.TextEditor) => {
+    vscode.commands.executeCommand('setContext', 'isLottie', isLottie(event))
+  })
+}
+
+export function deactivate() {
+  // this method is called when your extension is deactivated
 }
 
 
@@ -49,18 +58,9 @@ class LottieViewerPanel {
       this._disposables
     )
 
-    vscode.window.onDidChangeActiveTextEditor(async(event?:vscode.TextEditor) => {
-      if (event) {
-        const text = event.document.getText()
-        let isLottie = false
-
-        if (isJson(text)) {
-          isLottie = Animation.isLottie(JSON.parse(text))
-        }
-
-        if (event.document.languageId === 'json' && isLottie) {
-          this._update()
-        }
+    vscode.window.onDidChangeActiveTextEditor((event?:vscode.TextEditor) => {
+      if (isLottie(event)) {
+        this._update()
       }
     },
     null,
@@ -71,7 +71,7 @@ class LottieViewerPanel {
   public static show(extensionUri: vscode.Uri) {
     if (
       !vscode.window.activeTextEditor
-    || posix.extname(vscode.window.activeTextEditor.document.uri.path) !== '.json'
+    || !isLottie(vscode.window.activeTextEditor)
     ) {
       return vscode.window.showInformationMessage('Open a Lottie file first')
     }

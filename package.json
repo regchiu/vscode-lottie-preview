@@ -14,7 +14,9 @@
   "keywords": [
     "lottie"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:json"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -29,7 +31,7 @@
       "editor/title": [
         {
           "command": "vscode-lottie-preview.open",
-          "when": "editorLangId == json",
+          "when": "isLottie",
           "group": "navigation"
         }
       ]

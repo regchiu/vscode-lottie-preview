@@ -1,3 +1,6 @@
+import * as vscode from 'vscode'
+import { Animation } from '@lottiefiles/lottie-js'
+
 export function isJson(str: string): boolean {
   try {
     JSON.parse(str)
@@ -5,6 +8,17 @@ export function isJson(str: string): boolean {
     return false
   }
   return true
+}
+
+export function isLottie(activeTextEditor?: vscode.TextEditor): boolean {
+  if (activeTextEditor && activeTextEditor.document.languageId === 'json') {
+    const text = activeTextEditor.document.getText()
+    if (isJson(text)) {
+      return Animation.isLottie(JSON.parse(text))
+    }
+    return false
+  }
+  return false
 }
 
 export function getNonce() {
