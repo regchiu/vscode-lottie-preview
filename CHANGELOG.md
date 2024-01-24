@@ -4,6 +4,10 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.5]
+
+- Fix command menu item only show when active text editor is lottie file
+
 ## [0.0.4]
 
 - Check active text editor is Lottie file
