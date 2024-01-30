@@ -4,6 +4,16 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.0]
+
+### Features
+
+- Support `.lottie` file
+
+### Break Changes
+
+- Rename command title `Lottie Preview: Preview Lottie` to `Lottie Preview: Preview .json Lottie`
+
 ## [0.0.5]
 
 - Fix command menu item only show when active text editor is lottie file
