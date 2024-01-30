@@ -23,8 +23,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-lottie-preview.open",
-        "title": "Preview Lottie",
+        "command": "vscode-lottie-preview.openJson",
+        "title": "Preview .json Lottie",
         "category": "Lottie Preview",
         "icon": "$(open-preview)"
       }
@@ -32,7 +32,7 @@
     "menus": {
       "editor/title": [
         {
-          "command": "vscode-lottie-preview.open",
+          "command": "vscode-lottie-preview.openJson",
           "when": "isLottie",
           "group": "navigation"
         }

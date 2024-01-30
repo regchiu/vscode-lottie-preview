@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.executeCommand('setContext', 'isLottie', isLottie(vscode.window.activeTextEditor))
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('vscode-lottie-preview.open', () => {
+    vscode.commands.registerCommand('vscode-lottie-preview.openJson', () => {
       LottieViewerPanel.show(context.extensionUri)
     })
   )

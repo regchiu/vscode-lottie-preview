@@ -56,7 +56,7 @@ export class LottieViewerPanel {
       !vscode.window.activeTextEditor
     || !isLottie(vscode.window.activeTextEditor))
     {
-      return vscode.window.showInformationMessage('Open a Lottie file first')
+      return vscode.window.showInformationMessage('Open a .json Lottie file first')
     }
 
     const column = vscode.window.activeTextEditor.viewColumn
