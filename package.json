@@ -12,7 +12,9 @@
     "Other"
   ],
   "keywords": [
-    "lottie"
+    "lottie",
+    ".json",
+    ".lottie"
   ],
   "activationEvents": [
     "onLanguage:json"
@@ -35,7 +37,18 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "customEditors": [
+      {
+        "viewType": "vscode-lottie-preview.dotlottie",
+        "displayName": "Dotlottie",
+        "selector": [
+          {
+            "filenamePattern": "*.lottie"
+          }
+        ]
+      }
+    ]
   },
   "license": "MIT",
   "repository": {
@@ -67,6 +80,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@dotlottie/dotlottie-js": "^0.6.2",
+    "@dotlottie/player-component": "^2.7.8",
     "@lottiefiles/lottie-js": "^0.4.2",
     "@lottiefiles/lottie-player": "^2.0.2"
   }
