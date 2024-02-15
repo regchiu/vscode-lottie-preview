@@ -80,8 +80,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@dotlottie/dotlottie-js": "^0.6.2",
-    "@dotlottie/player-component": "^2.7.8",
+    "@dotlottie/dotlottie-js": "^0.7.0",
+    "@dotlottie/player-component": "^2.7.9",
     "@lottiefiles/lottie-js": "^0.4.2"
   }
 }
