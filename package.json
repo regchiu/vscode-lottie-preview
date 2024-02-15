@@ -82,7 +82,6 @@
   "dependencies": {
     "@dotlottie/dotlottie-js": "^0.6.2",
     "@dotlottie/player-component": "^2.7.8",
-    "@lottiefiles/lottie-js": "^0.4.2",
-    "@lottiefiles/lottie-player": "^2.0.2"
+    "@lottiefiles/lottie-js": "^0.4.2"
   }
 }

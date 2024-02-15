@@ -103,7 +103,7 @@ export class LottieViewerPanel {
   private _getHtmlForWebview(webview: vscode.Webview, jsonUri: vscode.Uri) {
     // Get resource paths
     const stylesUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css'))
-    const lottiePlayerScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', '@lottiefiles', 'lottie-player', 'dist', 'lottie-player.js'))
+    const dotlottiePlayerScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', '@dotlottie', 'player-component', 'dist', 'dotlottie-player.js'))
     const lottieFileUri = webview.asWebviewUri(jsonUri)
 
     const nonce = getNonce()
@@ -124,14 +124,14 @@ export class LottieViewerPanel {
         <link href=${stylesUri} rel="stylesheet" />
       </head>
       <body>
-        <lottie-player
+        <dotlottie-player
           autoplay
           controls
           loop
           mode="normal"
           src="${lottieFileUri}"
         />
-        <script nonce="${nonce}" src="${lottiePlayerScriptUri}"></script>
+        <script nonce="${nonce}" src="${dotlottiePlayerScriptUri}"></script>
       </body>
       </html>`
   }
