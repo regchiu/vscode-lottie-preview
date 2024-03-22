@@ -4,6 +4,11 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.2]
+- Update dependencies
+  1. `@dotlottie/dotlottie-js` to `0.7.1`
+  2. `@dotlottie/player-component` to `2.7.12`
+
 ## [1.0.1]
 
 ### Refactor
@@ -13,8 +18,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Chore
 
 - Update dependencies
-  1. `@dotlottie/dotlottie-js`
-  2. `@dotlottie/player-component`
+  1. `@dotlottie/dotlottie-js` to `0.7.0`
+  2. `@dotlottie/player-component` to `2.7.9`
 
 ## [1.0.0]
 
