@@ -109,11 +109,8 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
       DotlottieEditorProvider.viewType,
       new DotlottieEditorProvider(context),
       {
-        // For this demo extension, we enable `retainContextWhenHidden` which keeps the
-        // webview alive even when it is not visible. You should avoid using this setting
-        // unless is absolutely required as it does have memory overhead.
         webviewOptions: {
-          retainContextWhenHidden: true,
+          retainContextWhenHidden: false,
         },
         supportsMultipleEditorsPerDocument: false,
       })
