@@ -237,6 +237,7 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
    */
   private getHtmlForWebview(webview: vscode.Webview, dotlottieUri: vscode.Uri): string {
     const stylesUri = webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, 'media', 'styles.css'))
+    const mainJsUri = webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, 'media', 'main.js'))
     const dotlottiePlayerScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, 'node_modules', '@dotlottie', 'player-component', 'dist', 'dotlottie-player.js'))
     const dotlottieFileUri = webview.asWebviewUri(dotlottieUri)
 
@@ -258,14 +259,87 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
         <link href=${stylesUri} rel="stylesheet" />
       </head>
       <body>
-        <dotlottie-player
-          autoplay
-          controls
-          loop
-          mode="normal"
-          src="${dotlottieFileUri}"
-        />
+          <div class="lottie-viewer">
+          <div>
+            <div class="wrap">
+              <div class="input-box">
+                <label for="width">Width (px/%)</label>
+                <input id="width" type="text" value="300px" />
+              </div>
+              <div class="input-box">
+                <label for="height">Height (px/%)</label>
+                <input id="height" type="text" value="300px" />
+              </div>
+            </div>
+            <div class="wrap">
+              <div class="input-box">
+                <label for="background-color">Background color</label>
+                <input id="background-color" type="color" value="#ffffff" />
+              </div>
+              <div class="input-box">
+                <label for="animation-speed">Animation speed</label>
+                <select id="animation-speed">
+                  <option value="1">1x</option>
+                  <option value="2">2x</option>
+                  <option value="3">3x</option>
+                </select>
+              </div>
+            </div>
+            <div class="wrap">
+              <fieldset>
+                <legend>Play mode</legend>
+                <div>
+                  <input type="radio" id="normal" name="play-mode" value="normal" checked />
+                  <label for="normal">Normal</label>
+                </div>
+                <div>
+                  <input type="radio" id="bounce" name="play-mode" value="bounce" />
+                  <label for="bounce">Bounce</label>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Direction</legend>
+                <div>
+                  <input type="radio" id="forward" name="direction" value="1" checked />
+                  <label for="forward">Forward</label>
+                </div>
+                <div>
+                  <input type="radio" id="backward" name="direction" value="-1" />
+                  <label for="backward">Backward</label>
+                </div>
+              </fieldset>
+            </div>
+            <div class="wrap">
+              <fieldset>
+                <div>
+                  <input type="checkbox" id="controls" name="controls" value="controls" checked />
+                  <label for="controls">Controls</label>
+                </div>
+                <small>Display animation controls: Play, Pause & Slider</small>
+              </fieldset>
+              <fieldset>
+                <div>
+                  <input type="checkbox" id="loop" name="loop" value="true" checked />
+                  <label for="loop">Loop</label>
+                </div>
+                <small>Set to repeat animation</small>
+              </fieldset>
+            </div>
+          </div>
+          <div>
+            <dotlottie-player
+              class="dotlottie-player"
+              src="${dotlottieFileUri}"
+              autoplay
+              controls
+              loop
+              playMode="bounce"
+              style="width: 300px; height: 300px"
+            />
+          </div>
+        </div>
         <script nonce="${nonce}" src="${dotlottiePlayerScriptUri}"></script>
+        <script nonce="${nonce}" src="${mainJsUri}"></script>
       </body>
       </html>`
   }
