@@ -287,17 +287,6 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
             </div>
             <div class="wrap">
               <fieldset>
-                <legend>Play mode</legend>
-                <div>
-                  <input type="radio" id="normal" name="play-mode" value="normal" checked />
-                  <label for="normal">Normal</label>
-                </div>
-                <div>
-                  <input type="radio" id="bounce" name="play-mode" value="bounce" />
-                  <label for="bounce">Bounce</label>
-                </div>
-              </fieldset>
-              <fieldset>
                 <legend>Direction</legend>
                 <div>
                   <input type="radio" id="forward" name="direction" value="1" checked />
@@ -333,7 +322,7 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
               autoplay
               controls
               loop
-              playMode="bounce"
+              mode="normal"
               style="width: 300px; height: 300px"
             />
           </div>

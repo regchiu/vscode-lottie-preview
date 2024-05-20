@@ -30,16 +30,6 @@ animationSpeedSelect.addEventListener('change', (e) => {
   }
 })
 
-function onPlayModeChange(e) {
-  dotlottiePlayer.stop()
-  dotlottiePlayer.setAttribute('playMode', e.target.value)
-  dotlottiePlayer.play()
-}
-const normalRadio = document.querySelector('#normal')
-normalRadio.addEventListener('change', onPlayModeChange)
-const bounceRadio = document.querySelector('#bounce')
-bounceRadio.addEventListener('change', onPlayModeChange)
-
 function onDirectionChange(e) {
   const direction = parseInt(e.target.value, 10)
   if (!Number.isNaN(direction)) {
