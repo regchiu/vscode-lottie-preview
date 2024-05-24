@@ -3,14 +3,13 @@ import { Disposable, disposeAll } from './dispose'
 import { getNonce } from './utils'
 
 interface DotlottieDocumentDelegate {
-  getFileData(): Promise<Uint8Array>;
+  getFileData(): Promise<Uint8Array>
 }
 
 /**
  * Define the document (the data model) used for .lottie files.
  */
 class DotlottieDocument extends Disposable implements vscode.CustomDocument {
-
   static async create(
     uri: vscode.Uri,
     backupId: string | undefined,
@@ -38,7 +37,7 @@ class DotlottieDocument extends Disposable implements vscode.CustomDocument {
   private constructor(
     uri: vscode.Uri,
     initialContent: Uint8Array,
-    delegate: DotlottieDocumentDelegate
+    delegate: DotlottieDocumentDelegate,
   ) {
     super()
     this._uri = uri
@@ -46,9 +45,13 @@ class DotlottieDocument extends Disposable implements vscode.CustomDocument {
     this._delegate = delegate
   }
 
-  public get uri() { return this._uri }
+  public get uri() {
+    return this._uri
+  }
 
-  public get documentData(): Uint8Array { return this._documentData }
+  public get documentData(): Uint8Array {
+    return this._documentData
+  }
 
   private readonly _onDidDispose = this._register(new vscode.EventEmitter<void>())
   /**
@@ -56,20 +59,24 @@ class DotlottieDocument extends Disposable implements vscode.CustomDocument {
    */
   public readonly onDidDispose = this._onDidDispose.event
 
-  private readonly _onDidChangeDocument = this._register(new vscode.EventEmitter<{
-    readonly content?: Uint8Array;
-    // readonly edits: readonly DotlottieEdit[];
-  }>())
+  private readonly _onDidChangeDocument = this._register(
+    new vscode.EventEmitter<{
+      readonly content?: Uint8Array
+      // readonly edits: readonly DotlottieEdit[];
+    }>(),
+  )
   /**
    * Fired to notify webviews that the document has changed.
    */
   public readonly onDidChangeContent = this._onDidChangeDocument.event
 
-  private readonly _onDidChange = this._register(new vscode.EventEmitter<{
-    readonly label: string,
-    undo(): void,
-    redo(): void,
-  }>())
+  private readonly _onDidChange = this._register(
+    new vscode.EventEmitter<{
+      readonly label: string
+      undo(): void
+      redo(): void
+    }>(),
+  )
   /**
    * Fired to tell VS Code that an edit has occurred in the document.
    *
@@ -113,7 +120,8 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
           retainContextWhenHidden: false,
         },
         supportsMultipleEditorsPerDocument: false,
-      })
+      },
+    )
   }
 
   private static readonly viewType = 'vscode-lottie-preview.dotlottie'
@@ -123,9 +131,7 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
    */
   private readonly webviews = new WebviewCollection()
 
-  constructor(
-    private readonly _context: vscode.ExtensionContext
-  ) { }
+  constructor(private readonly _context: vscode.ExtensionContext) {}
 
   //#region CustomEditorProvider
 
@@ -143,27 +149,31 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
         const panel = webviewsForDocument[0]
         const response = await this.postMessageWithResponse<number[]>(panel, 'getFileData', {})
         return new Uint8Array(response)
-      }
+      },
     })
 
     const listeners: vscode.Disposable[] = []
 
-    listeners.push(document.onDidChange(e => {
-      // Tell VS Code that the document has been edited by the use.
-      this._onDidChangeCustomDocument.fire({
-        document,
-        ...e,
-      })
-    }))
-
-    listeners.push(document.onDidChangeContent(e => {
-      // Update all webviews when the document changes
-      for (const webviewPanel of this.webviews.get(document.uri)) {
-        this.postMessage(webviewPanel, 'update', {
-          content: e.content,
+    listeners.push(
+      document.onDidChange((e) => {
+        // Tell VS Code that the document has been edited by the use.
+        this._onDidChangeCustomDocument.fire({
+          document,
+          ...e,
         })
-      }
-    }))
+      }),
+    )
+
+    listeners.push(
+      document.onDidChangeContent((e) => {
+        // Update all webviews when the document changes
+        for (const webviewPanel of this.webviews.get(document.uri)) {
+          this.postMessage(webviewPanel, 'update', {
+            content: e.content,
+          })
+        }
+      }),
+    )
 
     document.onDidDispose(() => disposeAll(listeners))
 
@@ -184,10 +194,10 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
     }
     webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview, document.uri)
 
-    webviewPanel.webview.onDidReceiveMessage(e => this.onMessage(document, e))
+    webviewPanel.webview.onDidReceiveMessage((e) => this.onMessage(document, e))
 
     // Wait for the webview to be properly ready before we init
-    webviewPanel.webview.onDidReceiveMessage(e => {
+    webviewPanel.webview.onDidReceiveMessage((e) => {
       if (e.type === 'ready') {
         if (document.uri.scheme === 'untitled') {
           this.postMessage(webviewPanel, 'init', {
@@ -206,7 +216,9 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
     })
   }
 
-  private readonly _onDidChangeCustomDocument = new vscode.EventEmitter<vscode.CustomDocumentEditEvent<DotlottieDocument>>()
+  private readonly _onDidChangeCustomDocument = new vscode.EventEmitter<
+    vscode.CustomDocumentEditEvent<DotlottieDocument>
+  >()
   public readonly onDidChangeCustomDocument = this._onDidChangeCustomDocument.event
 
   public saveCustomDocument(): Thenable<void> {
@@ -224,9 +236,9 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
   public backupCustomDocument(): Thenable<vscode.CustomDocumentBackup> {
     return Promise.resolve({
       id: 0,
-      delete: async() => {
+      delete: async () => {
         // void
-      }
+      },
     }).then()
   }
 
@@ -236,9 +248,22 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
    * Get the static HTML used for in our editor's webviews.
    */
   private getHtmlForWebview(webview: vscode.Webview, dotlottieUri: vscode.Uri): string {
-    const stylesUri = webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, 'media', 'styles.css'))
-    const mainJsUri = webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, 'media', 'main.js'))
-    const dotlottiePlayerScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, 'node_modules', '@dotlottie', 'player-component', 'dist', 'dotlottie-player.js'))
+    const stylesUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._context.extensionUri, 'media', 'styles.css'),
+    )
+    const mainJsUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._context.extensionUri, 'media', 'main.js'),
+    )
+    const dotlottiePlayerScriptUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this._context.extensionUri,
+        'node_modules',
+        '@dotlottie',
+        'player-component',
+        'dist',
+        'dotlottie-player.js',
+      ),
+    )
     const dotlottieFileUri = webview.asWebviewUri(dotlottieUri)
 
     const nonce = getNonce()
@@ -337,24 +362,31 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private readonly _callbacks = new Map<number, (response: any) => void>()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private postMessageWithResponse<R = unknown>(panel: vscode.WebviewPanel, type: string, body: any): Promise<R> {
+  private postMessageWithResponse<R = unknown>(
+    panel: vscode.WebviewPanel,
+    type: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    body: any,
+  ): Promise<R> {
     const requestId = this._requestId++
-    const p = new Promise<R>(resolve => this._callbacks.set(requestId, resolve))
+    const p = new Promise<R>((resolve) => this._callbacks.set(requestId, resolve))
     panel.webview.postMessage({ type, requestId, body })
     return p
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private postMessage(panel: vscode.WebviewPanel, type: string, body: any): void {
+  private postMessage(
+    panel: vscode.WebviewPanel,
+    type: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    body: any,
+  ): void {
     panel.webview.postMessage({ type, body })
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private onMessage(document: DotlottieDocument, message: any) {
     switch (message.type) {
-      case 'response':
-      {
+      case 'response': {
         const callback = this._callbacks.get(message.requestId)
         callback?.(message.body)
         return
@@ -367,10 +399,9 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
  * Tracks all webviews.
  */
 class WebviewCollection {
-
   private readonly _webviews = new Set<{
-    readonly resource: string;
-    readonly webviewPanel: vscode.WebviewPanel;
+    readonly resource: string
+    readonly webviewPanel: vscode.WebviewPanel
   }>()
 
   /**

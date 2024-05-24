@@ -2,7 +2,7 @@ const dotlottiePlayer = document.querySelector('.dotlottie-player')
 let dotlottiePlayerWidth = '300px'
 let dotlottiePlayerHeight = '300px'
 
-const widthInput = document.querySelector("#width")
+const widthInput = document.querySelector('#width')
 widthInput.addEventListener('input', (e) => {
   dotlottiePlayerWidth = e.target.value
   dotlottiePlayer.style = `width: ${dotlottiePlayerWidth}; height: ${dotlottiePlayerHeight}`

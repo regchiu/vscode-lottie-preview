@@ -19,7 +19,12 @@ export class LottieViewerPanel {
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this._panel = panel
     this._extensionUri = extensionUri
-    this._panel.iconPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'images', 'lottie-logo.png')
+    this._panel.iconPath = vscode.Uri.joinPath(
+      this._extensionUri,
+      'media',
+      'images',
+      'lottie-logo.png',
+    )
 
     // Set the webview's initial html content
     this._update()
@@ -30,7 +35,7 @@ export class LottieViewerPanel {
 
     // Handle messages from the webview
     this._panel.webview.onDidReceiveMessage(
-      message => {
+      (message) => {
         switch (message.command) {
           case 'alert':
             vscode.window.showErrorMessage(message.text)
@@ -38,24 +43,22 @@ export class LottieViewerPanel {
         }
       },
       null,
-      this._disposables
+      this._disposables,
     )
 
-    vscode.window.onDidChangeActiveTextEditor((event?:vscode.TextEditor) => {
-      if (isLottie(event)) {
-        this._update()
-      }
-    },
-    null,
-    this._disposables
+    vscode.window.onDidChangeActiveTextEditor(
+      (event?: vscode.TextEditor) => {
+        if (isLottie(event)) {
+          this._update()
+        }
+      },
+      null,
+      this._disposables,
     )
   }
 
   public static show(extensionUri: vscode.Uri) {
-    if (
-      !vscode.window.activeTextEditor
-    || !isLottie(vscode.window.activeTextEditor))
-    {
+    if (!vscode.window.activeTextEditor || !isLottie(vscode.window.activeTextEditor)) {
       return vscode.window.showInformationMessage('Open a .json Lottie file first')
     }
 
@@ -66,12 +69,12 @@ export class LottieViewerPanel {
       LottieViewerPanel.currentPanel._panel.reveal(column)
       return
     }
-    
+
     const panel = vscode.window.createWebviewPanel(
       LottieViewerPanel.viewType,
       'Lottie Viewer',
       vscode.ViewColumn.Beside,
-      getWebviewOptions()
+      getWebviewOptions(),
     )
 
     LottieViewerPanel.currentPanel = new LottieViewerPanel(panel, extensionUri)
@@ -86,7 +89,7 @@ export class LottieViewerPanel {
     disposeAll(this._disposables)
   }
 
-  private async _update() {  
+  private async _update() {
     const webview = this._panel.webview
     const jsonUri = vscode.window.activeTextEditor!.document.uri
 
@@ -102,9 +105,22 @@ export class LottieViewerPanel {
 
   private _getHtmlForWebview(webview: vscode.Webview, jsonUri: vscode.Uri) {
     // Get resource paths
-    const stylesUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css'))
-    const mainJsUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'))
-    const dotlottiePlayerScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', '@dotlottie', 'player-component', 'dist', 'dotlottie-player.js'))
+    const stylesUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css'),
+    )
+    const mainJsUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'),
+    )
+    const dotlottiePlayerScriptUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this._extensionUri,
+        'node_modules',
+        '@dotlottie',
+        'player-component',
+        'dist',
+        'dotlottie-player.js',
+      ),
+    )
     const lottieFileUri = webview.asWebviewUri(jsonUri)
 
     const nonce = getNonce()
@@ -203,7 +219,7 @@ export class LottieViewerPanel {
 function getWebviewOptions(): vscode.WebviewOptions {
   return {
     // Enable javascript in the webview
-    enableScripts: true
+    enableScripts: true,
   }
 }
 

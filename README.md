@@ -9,4 +9,3 @@ Preview Lottie in Visual Studio Code.
 
 - Open `.lottie` file directly.
   ![feature 2](media/images/vscode-lottie-preview-feature-2.gif)
-
