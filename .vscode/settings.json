@@ -10,5 +10,11 @@
   "typescript.tsc.autoDetect": "off",
   "cSpell.words": ["dotlottie", "lottiefiles"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }

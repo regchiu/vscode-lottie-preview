@@ -96,32 +96,24 @@ export class LottieViewerPanel {
     this._updateForFile(webview, jsonUri)
   }
 
-  private _updateForFile(webview: vscode.Webview, jsonUri: vscode.Uri) {
+  private async _updateForFile(webview: vscode.Webview, jsonUri: vscode.Uri) {
     const fileName = posix.basename(jsonUri.path)
 
     this._panel.title = `VSCode Lottie Preview | ${fileName}`
-    this._panel.webview.html = this._getHtmlForWebview(webview, jsonUri)
+
+    this._panel.webview.html = this._getHtmlForWebview(webview)
+    // Pass dotlottie uri to webview
+    await this._panel.webview.postMessage(webview.asWebviewUri(jsonUri))
   }
 
-  private _getHtmlForWebview(webview: vscode.Webview, jsonUri: vscode.Uri) {
+  private _getHtmlForWebview(webview: vscode.Webview) {
     // Get resource paths
     const stylesUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css'),
+      vscode.Uri.joinPath(this._extensionUri, 'webview-ui', 'build', 'assets', 'index.css'),
     )
     const mainJsUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'),
+      vscode.Uri.joinPath(this._extensionUri, 'webview-ui', 'build', 'assets', 'index.js'),
     )
-    const dotlottiePlayerScriptUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(
-        this._extensionUri,
-        'node_modules',
-        '@dotlottie',
-        'player-component',
-        'dist',
-        'dotlottie-player.js',
-      ),
-    )
-    const lottieFileUri = webview.asWebviewUri(jsonUri)
 
     const nonce = getNonce()
 
@@ -133,7 +125,7 @@ export class LottieViewerPanel {
         <!--
           Use a content security policy to only allow loading specific resources in the webview
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https: data:; script-src 'nonce-${nonce}'; connect-src ${webview.cspSource} https:; script-src-elem https:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https: data:; font-src ${webview.cspSource}; script-src 'nonce-${nonce}'; connect-src ${webview.cspSource} https:; script-src-elem https:;">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Lottie Viewer</title>
@@ -141,85 +133,18 @@ export class LottieViewerPanel {
         <link href=${stylesUri} rel="stylesheet" />
       </head>
       <body>
-        <div class="lottie-viewer">
-          <div>
-            <div class="wrap">
-              <div class="input-box">
-                <label for="width">Width (px/%)</label>
-                <input id="width" type="text" value="300px" />
-              </div>
-              <div class="input-box">
-                <label for="height">Height (px/%)</label>
-                <input id="height" type="text" value="300px" />
-              </div>
-            </div>
-            <div class="wrap">
-              <div class="input-box">
-                <label for="background-color">Background color</label>
-                <input id="background-color" type="color" value="#ffffff" />
-              </div>
-              <div class="input-box">
-                <label for="animation-speed">Animation speed</label>
-                <select id="animation-speed">
-                  <option value="1">1x</option>
-                  <option value="2">2x</option>
-                  <option value="3">3x</option>
-                </select>
-              </div>
-            </div>
-            <div class="wrap">
-              <fieldset>
-                <legend>Direction</legend>
-                <div>
-                  <input type="radio" id="forward" name="direction" value="1" checked />
-                  <label for="forward">Forward</label>
-                </div>
-                <div>
-                  <input type="radio" id="backward" name="direction" value="-1" />
-                  <label for="backward">Backward</label>
-                </div>
-              </fieldset>
-            </div>
-            <div class="wrap">
-              <fieldset>
-                <div>
-                  <input type="checkbox" id="controls" name="controls" value="controls" checked />
-                  <label for="controls">Controls</label>
-                </div>
-                <small>Display animation controls: Play, Pause & Slider</small>
-              </fieldset>
-              <fieldset>
-                <div>
-                  <input type="checkbox" id="loop" name="loop" value="true" checked />
-                  <label for="loop">Loop</label>
-                </div>
-                <small>Set to repeat animation</small>
-              </fieldset>
-            </div>
-          </div>
-          <div>
-            <dotlottie-player
-              class="dotlottie-player"
-              src="${lottieFileUri}"
-              autoplay
-              controls
-              loop
-              mode="normal"
-              style="width: 300px; height: 300px"
-            />
-          </div>
-        </div>
-        <script nonce="${nonce}" src="${dotlottiePlayerScriptUri}"></script>
-        <script nonce="${nonce}" src="${mainJsUri}"></script>
+        <div id="root"></div>
+        <script type="module" nonce="${nonce}" src="${mainJsUri}"></script>
       </body>
       </html>`
   }
 }
 
-function getWebviewOptions(): vscode.WebviewOptions {
+function getWebviewOptions(): vscode.WebviewPanelOptions & vscode.WebviewOptions {
   return {
     // Enable javascript in the webview
     enableScripts: true,
+    retainContextWhenHidden: true,
   }
 }
 

@@ -56,6 +56,9 @@
     "url": "https://github.com/regchiu/vscode-lottie-preview"
   },
   "scripts": {
+    "install:all": "npm install && cd webview-ui && npm install",
+    "dev:webview": "cd webview-ui && npm run dev",
+    "build:webview": "cd webview-ui && npm run build",
     "vscode:prepublish": "npm run esbuild-base -- --minify",
     "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
     "esbuild": "npm run esbuild-base -- --sourcemap",
@@ -84,6 +87,7 @@
     "commitizen": "^4.3.0",
     "esbuild": "^0.19.11",
     "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.34.1",
     "husky": "^9.0.11",
     "inquirer": "^9.2.22",
     "lint-staged": "^15.2.4",
