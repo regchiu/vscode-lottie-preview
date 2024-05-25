@@ -117,7 +117,7 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
       new DotlottieEditorProvider(context),
       {
         webviewOptions: {
-          retainContextWhenHidden: true,
+          retainContextWhenHidden: false,
         },
         supportsMultipleEditorsPerDocument: false,
       },
@@ -195,7 +195,7 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
 
     webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview)
     // Pass dotlottie uri to webview
-    await webviewPanel.webview.postMessage(webviewPanel.webview.asWebviewUri(document.uri))
+    webviewPanel.webview.postMessage(webviewPanel.webview.asWebviewUri(document.uri))
 
     webviewPanel.webview.onDidReceiveMessage((e) => this.onMessage(document, e))
 

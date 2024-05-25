@@ -96,14 +96,14 @@ export class LottieViewerPanel {
     this._updateForFile(webview, jsonUri)
   }
 
-  private async _updateForFile(webview: vscode.Webview, jsonUri: vscode.Uri) {
+  private _updateForFile(webview: vscode.Webview, jsonUri: vscode.Uri) {
     const fileName = posix.basename(jsonUri.path)
 
     this._panel.title = `VSCode Lottie Preview | ${fileName}`
 
     this._panel.webview.html = this._getHtmlForWebview(webview)
     // Pass dotlottie uri to webview
-    await this._panel.webview.postMessage(webview.asWebviewUri(jsonUri))
+    this._panel.webview.postMessage(webview.asWebviewUri(jsonUri))
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
