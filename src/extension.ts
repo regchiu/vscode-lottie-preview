@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
-import { isLottie, LottieViewerPanel } from './lottieViewer'
+
 import { DotlottieEditorProvider } from './dotlottieEditor'
+import { isLottie, LottieViewerPanel } from './lottieViewer'
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(DotlottieEditorProvider.register(context))

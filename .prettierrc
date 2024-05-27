@@ -10,5 +10,18 @@
   "bracketSameLine": false,
   "arrowParens": "always",
   "singleAttributePerLine": true,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "<TYPES>",
+    "",
+    "^react$",
+    "",
+    "<BUILT_IN_MODULES>",
+    "",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^[.]",
+    ".css$"
+  ]
 }

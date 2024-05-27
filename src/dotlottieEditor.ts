@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+
 import { Disposable, disposeAll } from './dispose'
 import { getNonce } from './utils'
 

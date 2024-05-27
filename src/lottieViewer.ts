@@ -1,8 +1,10 @@
-import * as vscode from 'vscode'
 import { posix } from 'path'
+
 import { Animation } from '@lottiefiles/lottie-js'
-import { getNonce } from './utils'
+import * as vscode from 'vscode'
+
 import { disposeAll } from './dispose'
+import { getNonce } from './utils'
 
 export class LottieViewerPanel {
   /**

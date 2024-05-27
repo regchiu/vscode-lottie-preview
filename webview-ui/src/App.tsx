@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
+
 import {
-  VSCodeTextField,
+  VSCodeCheckbox,
   VSCodeDropdown,
   VSCodeOption,
-  VSCodeCheckbox,
+  VSCodeTextField,
 } from '@vscode/webview-ui-toolkit/react'
 
 type Option<L, V> = {
