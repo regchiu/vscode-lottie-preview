@@ -101,12 +101,10 @@ export class LottieViewerPanel {
 
     this._panel.title = `VSCode Lottie Preview | ${fileName}`
 
-    this._panel.webview.html = this._getHtmlForWebview(webview)
-    // Pass dotlottie uri to webview
-    this._panel.webview.postMessage(webview.asWebviewUri(jsonUri))
+    this._panel.webview.html = this._getHtmlForWebview(webview, jsonUri)
   }
 
-  private _getHtmlForWebview(webview: vscode.Webview) {
+  private _getHtmlForWebview(webview: vscode.Webview, jsonUri: vscode.Uri) {
     // Get resource paths
     const stylesUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'webview-ui', 'build', 'assets', 'index.css'),
@@ -114,6 +112,19 @@ export class LottieViewerPanel {
     const mainJsUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'webview-ui', 'build', 'assets', 'index.js'),
     )
+
+    const dotlottiePlayerScriptUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this._extensionUri,
+        'node_modules',
+        '@dotlottie',
+        'player-component',
+        'dist',
+        'dotlottie-player.js',
+      ),
+    )
+
+    const lottieFileUri = webview.asWebviewUri(jsonUri)
 
     const nonce = getNonce()
 
@@ -134,7 +145,17 @@ export class LottieViewerPanel {
       </head>
       <body>
         <div id="root"></div>
+        <dotlottie-player
+          class="dotlottie-player"
+          loop
+          autoplay
+          controls
+          mode="normal"
+          src="${lottieFileUri}"
+          style="width: 300px; height: 300px"
+        />
         <script type="module" nonce="${nonce}" src="${mainJsUri}"></script>
+        <script nonce="${nonce}" src="${dotlottiePlayerScriptUri}"></script>
       </body>
       </html>`
   }
@@ -144,7 +165,7 @@ function getWebviewOptions(): vscode.WebviewPanelOptions & vscode.WebviewOptions
   return {
     // Enable javascript in the webview
     enableScripts: true,
-    retainContextWhenHidden: true,
+    retainContextWhenHidden: false,
   }
 }
 

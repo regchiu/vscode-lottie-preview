@@ -3,16 +3,17 @@ import {
   VSCodeTextField,
   VSCodeDropdown,
   VSCodeOption,
-  VSCodeProgressRing,
   VSCodeCheckbox,
 } from '@vscode/webview-ui-toolkit/react'
-import { DotLottiePlayer, Controls, PlayMode } from '@dotlottie/react-player'
-import type { AnimationDirection, DotLottieCommonPlayer } from '@dotlottie/react-player'
-import '@dotlottie/react-player/dist/index.css'
 
 type Option<L, V> = {
   label: L
   value: V
+}
+
+enum Direction {
+  Forward = 1,
+  Backward = -1,
 }
 
 const SPEED_OPTIONS: Option<string, string>[] = [
@@ -30,17 +31,6 @@ const SPEED_OPTIONS: Option<string, string>[] = [
   },
 ]
 
-const PLAY_MODE_OPTIONS: Option<string, PlayMode>[] = [
-  {
-    label: 'Normal',
-    value: PlayMode.Normal,
-  },
-  {
-    label: 'Bounce',
-    value: PlayMode.Bounce,
-  },
-]
-
 const DIRECTION_OPTIONS: Option<string, string>[] = [
   {
     label: 'Forward',
@@ -52,25 +42,18 @@ const DIRECTION_OPTIONS: Option<string, string>[] = [
   },
 ]
 
+let dotlottiePlayer: Element | null = null
+
 function App() {
-  const lottieRef = useRef<DotLottieCommonPlayer>(null)
   const [background, setBackground] = useState('transparent')
   const colorInputRef = useRef<HTMLInputElement | null>(null)
   const [speed, setSpeed] = useState(1)
-  const [direction, setDirection] = useState<AnimationDirection>(1)
-  const [playMode, setPlayMode] = useState<PlayMode>(PlayMode.Normal)
+  const [direction, setDirection] = useState<Direction>(Direction.Forward)
   const [showControls, setShowControls] = useState(true)
   const [isLoop, setIsLoop] = useState(true)
-  const [src, setSrc] = useState('')
 
   useEffect(() => {
-    function onMessage(e: MessageEvent) {
-      const message = e.data
-      setSrc(`${message.scheme}://${message.authority}${message.path}`)
-    }
-    window.addEventListener('message', onMessage)
-
-    return () => window.removeEventListener('message', onMessage)
+    dotlottiePlayer = document.querySelector('.dotlottie-player')
   }, [])
 
   function handleBackgroundFocus() {
@@ -79,35 +62,53 @@ function App() {
 
   function handleBackgroundColorChange(e: React.ChangeEvent<HTMLInputElement>) {
     setBackground(e.target.value)
+    if (dotlottiePlayer) {
+      dotlottiePlayer.setAttribute('background', e.target.value)
+    }
   }
 
   function handleSpeedChange(e: Event | React.FormEvent<HTMLElement>) {
     const value = parseInt((e.target as HTMLSelectElement).value, 10)
     if (!Number.isNaN(value)) {
       setSpeed(value)
+
+      if (dotlottiePlayer) {
+        ;(dotlottiePlayer as any).setSpeed(value)
+      }
     }
   }
 
   function handleDirectionChange(e: Event | React.FormEvent<HTMLElement>) {
-    const value = parseInt((e.target as HTMLSelectElement).value, 10) as AnimationDirection
+    const value = parseInt((e.target as HTMLSelectElement).value, 10) as Direction
     if (!Number.isNaN(value)) {
       setDirection(value)
-    }
-  }
 
-  function handlePlayModeChange(e: Event | React.FormEvent<HTMLElement>) {
-    const value = (e.target as HTMLSelectElement).value as PlayMode
-    setPlayMode(value)
+      if (dotlottiePlayer) {
+        ;(dotlottiePlayer as any).setDirection(value)
+      }
+    }
   }
 
   function handleLoopChange(e: Event | React.FormEvent<HTMLElement>) {
     const checked = (e.target as HTMLInputElement).checked
     setIsLoop(checked)
+
+    if (dotlottiePlayer) {
+      ;(dotlottiePlayer as any).toggleLooping()
+    }
   }
 
   function handleControlsChange(e: Event | React.FormEvent<HTMLElement>) {
     const checked = (e.target as HTMLInputElement).checked
     setShowControls(checked)
+
+    if (dotlottiePlayer) {
+      if (checked) {
+        dotlottiePlayer.setAttribute('controls', 'true')
+      } else {
+        dotlottiePlayer.removeAttribute('controls')
+      }
+    }
   }
 
   return (
@@ -174,28 +175,6 @@ function App() {
           </VSCodeDropdown>
         </div>
         <div className="w-full">
-          <label
-            className="block text-sm font-medium leading-6"
-            htmlFor="play-mode"
-          >
-            Play mode
-          </label>
-          <VSCodeDropdown
-            id="play-mode"
-            onChange={handlePlayModeChange}
-          >
-            {PLAY_MODE_OPTIONS.map((option) => (
-              <VSCodeOption
-                key={option.value}
-                value={option.value}
-                selected={option.value === playMode}
-              >
-                {option.label}
-              </VSCodeOption>
-            ))}
-          </VSCodeDropdown>
-        </div>
-        <div className="w-full">
           <VSCodeCheckbox
             checked={isLoop}
             onChange={handleLoopChange}
@@ -213,28 +192,6 @@ function App() {
           </VSCodeCheckbox>
           <p className="text-sm">Display animation controls: Play, Pause & Slider</p>
         </div>
-      </div>
-      <div className="w-full">
-        {src ? (
-          <DotLottiePlayer
-            ref={lottieRef}
-            autoplay
-            loop={isLoop}
-            background={background}
-            speed={speed}
-            direction={direction}
-            playMode={playMode}
-            src={src}
-            style={{
-              width: '300px',
-              height: '300px',
-            }}
-          >
-            {showControls ? <Controls /> : null}
-          </DotLottiePlayer>
-        ) : (
-          <VSCodeProgressRing />
-        )}
       </div>
     </div>
   )

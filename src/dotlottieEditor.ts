@@ -193,9 +193,7 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
       enableScripts: true,
     }
 
-    webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview)
-    // Pass dotlottie uri to webview
-    webviewPanel.webview.postMessage(webviewPanel.webview.asWebviewUri(document.uri))
+    webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview, document.uri)
 
     webviewPanel.webview.onDidReceiveMessage((e) => this.onMessage(document, e))
 
@@ -250,13 +248,25 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
   /**
    * Get the static HTML used for in our editor's webviews.
    */
-  private getHtmlForWebview(webview: vscode.Webview): string {
+  private getHtmlForWebview(webview: vscode.Webview, dotlottieUri: vscode.Uri): string {
     const stylesUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._context.extensionUri, 'webview-ui', 'build', 'assets', 'index.css'),
     )
     const mainJsUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._context.extensionUri, 'webview-ui', 'build', 'assets', 'index.js'),
     )
+
+    const dotlottiePlayerScriptUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this._context.extensionUri,
+        'node_modules',
+        '@dotlottie',
+        'player-component',
+        'dist',
+        'dotlottie-player.js',
+      ),
+    )
+    const dotlottieFileUri = webview.asWebviewUri(dotlottieUri)
 
     const nonce = getNonce()
 
@@ -277,7 +287,17 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
       </head>
       <body>
         <div id="root"></div>
+        <dotlottie-player
+          class="dotlottie-player"
+          loop
+          autoplay
+          controls
+          mode="normal"
+          src="${dotlottieFileUri}"
+          style="width: 300px; height: 300px"
+        />
         <script type="module" nonce="${nonce}" src="${mainJsUri}"></script>
+        <script nonce="${nonce}" src="${dotlottiePlayerScriptUri}"></script>
       </body>
       </html>`
   }
