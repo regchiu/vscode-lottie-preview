@@ -4,6 +4,12 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.1]
+
+### Fix
+
+- Unstable webview postMessage.
+
 ## [1.2.0]
 
 ### Refactor
