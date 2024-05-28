@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { DotLottiePlayer } from '@dotlottie/player-component'
 import {
   VSCodeCheckbox,
   VSCodeDropdown,
@@ -43,7 +44,7 @@ const DIRECTION_OPTIONS: Option<string, string>[] = [
   },
 ]
 
-let dotlottiePlayer: Element | null = null
+let dotlottiePlayer: DotLottiePlayer | null = null
 
 function App() {
   const [background, setBackground] = useState('transparent')
@@ -74,7 +75,7 @@ function App() {
       setSpeed(value)
 
       if (dotlottiePlayer) {
-        ;(dotlottiePlayer as any).setSpeed(value)
+        dotlottiePlayer.setSpeed(value)
       }
     }
   }
@@ -85,7 +86,7 @@ function App() {
       setDirection(value)
 
       if (dotlottiePlayer) {
-        ;(dotlottiePlayer as any).setDirection(value)
+        dotlottiePlayer.setDirection(value)
       }
     }
   }
@@ -95,7 +96,7 @@ function App() {
     setIsLoop(checked)
 
     if (dotlottiePlayer) {
-      ;(dotlottiePlayer as any).toggleLooping()
+      dotlottiePlayer.toggleLooping()
     }
   }
 

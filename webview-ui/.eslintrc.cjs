@@ -21,5 +21,12 @@ module.exports = {
         html: true,
       },
     ],
+    '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+  },
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
   },
 }
