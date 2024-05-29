@@ -13,6 +13,7 @@ Preview Lottie in Visual Studio Code.
 ## Commands
 
 Windows: `Ctrl+Shift+P`, `F1`.
+
 macOS: `⇧⌘P` or `F1`.
 
 | Command                              | Description            |
