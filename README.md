@@ -9,3 +9,12 @@ Preview Lottie in Visual Studio Code.
 
 - Open `.lottie` file directly.
   ![feature 2](media/images/vscode-lottie-preview-feature-2.gif)
+
+## Commands
+
+Windows: `Ctrl+Shift+P`, `F1`.
+macOS: `⇧⌘P` or `F1`.
+
+| Command                              | Description            |
+| ------------------------------------ | ---------------------- |
+| Lottie Preview: Preview .json Lottie | Preview `.json` lottie |
