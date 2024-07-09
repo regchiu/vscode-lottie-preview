@@ -4,6 +4,16 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.2]
+
+### Docs
+
+- Add commands information.
+
+### Security
+
+- Upgrade `@azure/identity` to version `4.2.1` or later.
+
 ## [1.2.1]
 
 ### Fix
