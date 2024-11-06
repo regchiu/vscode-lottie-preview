@@ -4,6 +4,13 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.3]
+
+### Security
+
+- Bump `vite` from `5.2.11` to `5.4.10`.
+- npm audit fix.
+
 ## [1.2.2]
 
 ### Docs
