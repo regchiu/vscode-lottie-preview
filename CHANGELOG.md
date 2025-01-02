@@ -4,6 +4,16 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.4]
+
+### Performance
+
+- Improve vite compression.
+
+### Security
+
+- npm audit fix.
+
 ## [1.2.3]
 
 ### Security
