@@ -93,9 +93,10 @@ export class LottieViewerPanel {
 
   private async _update() {
     const webview = this._panel.webview
-    const jsonUri = vscode.window.activeTextEditor!.document.uri
-
-    this._updateForFile(webview, jsonUri)
+    const jsonUri = vscode.window.activeTextEditor?.document.uri
+    if (jsonUri) {
+      this._updateForFile(webview, jsonUri)
+    }
   }
 
   private _updateForFile(webview: vscode.Webview, jsonUri: vscode.Uri) {
@@ -174,7 +175,7 @@ function getWebviewOptions(): vscode.WebviewPanelOptions & vscode.WebviewOptions
 function isJson(str: string): boolean {
   try {
     JSON.parse(str)
-  } catch (error) {
+  } catch {
     return false
   }
   return true

@@ -8,7 +8,7 @@ import {
   VSCodeTextField,
 } from '@vscode/webview-ui-toolkit/react'
 
-type Option<L, V> = {
+interface Option<L, V> {
   label: L
   value: V
 }
