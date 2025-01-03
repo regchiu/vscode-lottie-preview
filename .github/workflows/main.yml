@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
-      - run: npm run install:all
+      - run: npm install
       - run: npm run build:webview
       - run: xvfb-run -a npm run test
         if: runner.os == 'Linux'

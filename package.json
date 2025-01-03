@@ -1,5 +1,8 @@
 {
   "name": "vscode-lottie-preview",
+  "workspaces": [
+    "webview-ui"
+  ],
   "displayName": "VSCode Lottie Preview",
   "description": "Preview Lottie in Visual Studio Code",
   "version": "1.2.4",
@@ -56,9 +59,8 @@
     "url": "https://github.com/regchiu/vscode-lottie-preview"
   },
   "scripts": {
-    "install:all": "npm install && cd webview-ui && npm install",
-    "dev:webview": "cd webview-ui && npm run dev",
-    "build:webview": "cd webview-ui && npm run build",
+    "dev:webview": "npm run dev --workspace=webview-ui",
+    "build:webview": "npm run build --workspace=webview-ui",
     "vscode:prepublish": "npm run esbuild-base -- --minify",
     "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
     "esbuild": "npm run esbuild-base -- --sourcemap",
