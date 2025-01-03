@@ -13,11 +13,5 @@ export default defineConfig({
         assetFileNames: `assets/[name].[ext]`,
       },
     },
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      },
-    },
   },
 })
