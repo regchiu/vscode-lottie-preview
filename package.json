@@ -5,7 +5,7 @@
   ],
   "displayName": "VSCode Lottie Preview",
   "description": "Preview Lottie in Visual Studio Code",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "publisher": "regchiu",
   "engines": {
     "vscode": "^1.85.0"
