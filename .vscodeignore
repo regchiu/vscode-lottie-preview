@@ -15,7 +15,6 @@ commitlint.config.mjs
 eslint.config.mjs
 **/postcss.config.js
 **/tailwind.config.js
-**/node_modules
 
 # webview-ui
 webview-ui/index.html
