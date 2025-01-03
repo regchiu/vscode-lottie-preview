@@ -1,10 +1,20 @@
 .vscode/**
 .vscode-test/**
 src/**
+webview/src/**
 .gitignore
 .yarnrc
 **/tsconfig.json
-**/.eslintrc.json
+**/tsconfig.app.json
+**/tsconfig.node.json
+**/eslint.config.js
 **/*.map
 **/*.ts
 **/.vscode-test.*
+commitlint.config.mjs
+eslint.config.mjs
+**/postcss.config.js
+**/tailwind.config.js
+
+# webview-ui
+webview-ui/index.html
