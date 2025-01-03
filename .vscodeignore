@@ -18,3 +18,4 @@ eslint.config.mjs
 
 # webview-ui
 webview-ui/index.html
+webview-ui/src/**
