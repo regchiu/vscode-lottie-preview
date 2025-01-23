@@ -6,8 +6,8 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   eslint.configs.recommended,
-  tseslint.configs.strict,
-  tseslint.configs.stylistic,
+  ...tseslint.configs.strict,
+  ...tseslint.configs.stylistic,
   {
     plugins: {
       '@stylistic/ts': stylisticTs,
@@ -17,7 +17,9 @@ export default tseslint.config(
       '@stylistic/ts/semi': ['error', 'never'],
       '@stylistic/ts/quotes': ['error', 'single', { allowTemplateLiterals: true }],
     },
-    ignores: ['media', 'out', 'dist', '**/*.d.ts'],
     files: ['**/*.ts'],
+  },
+  {
+    ignores: ['media', 'out', 'dist', '**/*.d.ts', 'esbuild.js'],
   },
 )
