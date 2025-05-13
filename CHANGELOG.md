@@ -4,6 +4,16 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.10]
+
+### Chore
+
+- Update dependencies.
+
+### Features
+
+- Smoother operation.
+
 ## [1.2.9]
 
 ### Chore
