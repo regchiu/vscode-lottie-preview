@@ -31,6 +31,10 @@ const SPEED_OPTIONS: Option<string, string>[] = [
     label: '3x',
     value: '3',
   },
+  {
+    label: '4x',
+    value: '4',
+  },
 ]
 
 const DIRECTION_OPTIONS: Option<string, string>[] = [
@@ -63,54 +67,50 @@ function App() {
   }
 
   function handleBackgroundColorChange(e: React.ChangeEvent<HTMLInputElement>) {
+    dotlottiePlayer?.pause()
     setBackground(e.target.value)
-    if (dotlottiePlayer) {
-      dotlottiePlayer.setAttribute('background', e.target.value)
-    }
+    dotlottiePlayer?.setAttribute('background', e.target.value)
+    dotlottiePlayer?.play()
   }
 
   function handleSpeedChange(e: Event | React.FormEvent<HTMLElement>) {
     const value = parseInt((e.target as HTMLSelectElement).value, 10)
     if (!Number.isNaN(value)) {
+      dotlottiePlayer?.pause()
       setSpeed(value)
-
-      if (dotlottiePlayer) {
-        dotlottiePlayer.setSpeed(value)
-      }
+      dotlottiePlayer?.setSpeed(value)
+      dotlottiePlayer?.play()
     }
   }
 
   function handleDirectionChange(e: Event | React.FormEvent<HTMLElement>) {
     const value = parseInt((e.target as HTMLSelectElement).value, 10) as Direction
     if (!Number.isNaN(value)) {
+      dotlottiePlayer?.pause()
       setDirection(value)
-
-      if (dotlottiePlayer) {
-        dotlottiePlayer.setDirection(value)
-      }
+      dotlottiePlayer?.setDirection(value)
+      dotlottiePlayer?.play()
     }
   }
 
   function handleLoopChange(e: Event | React.FormEvent<HTMLElement>) {
     const checked = (e.target as HTMLInputElement).checked
+    dotlottiePlayer?.pause()
     setIsLoop(checked)
-
-    if (dotlottiePlayer) {
-      dotlottiePlayer.toggleLooping()
-    }
+    dotlottiePlayer?.toggleLooping()
+    dotlottiePlayer?.play()
   }
 
   function handleControlsChange(e: Event | React.FormEvent<HTMLElement>) {
     const checked = (e.target as HTMLInputElement).checked
     setShowControls(checked)
-
-    if (dotlottiePlayer) {
-      if (checked) {
-        dotlottiePlayer.setAttribute('controls', 'true')
-      } else {
-        dotlottiePlayer.removeAttribute('controls')
-      }
+    dotlottiePlayer?.pause()
+    if (checked) {
+      dotlottiePlayer?.setAttribute('controls', 'true')
+    } else {
+      dotlottiePlayer?.removeAttribute('controls')
     }
+    dotlottiePlayer?.play()
   }
 
   return (

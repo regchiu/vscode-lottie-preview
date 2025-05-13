@@ -288,15 +288,17 @@ export class DotlottieEditorProvider implements vscode.CustomEditorProvider<Dotl
       </head>
       <body>
         <div id="root"></div>
-        <dotlottie-player
-          class="dotlottie-player"
-          loop
-          autoplay
-          controls
-          mode="normal"
-          src="${dotlottieFileUri}"
-          style="width: 300px; height: 300px"
-        />
+        <div style="max-width: 1024px; margin: 0 auto; padding: 3rem 1.5rem;">
+          <dotlottie-player
+            class="dotlottie-player"
+            loop
+            autoplay
+            controls
+            mode="normal"
+            src="${dotlottieFileUri}"
+            style="width: 300px; height: 300px"
+          />
+        </div>
         <script type="module" nonce="${nonce}" src="${mainJsUri}"></script>
         <script nonce="${nonce}" src="${dotlottiePlayerScriptUri}"></script>
       </body>
