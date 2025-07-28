@@ -4,6 +4,14 @@ All notable changes to the "vscode-lottie-preview" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.11]
+
+### Chore
+
+- Update dependencies.
+- Node.js v20.
+- Reduce package size.
+
 ## [1.2.10]
 
 ### Chore

@@ -5,7 +5,7 @@
   ],
   "displayName": "VSCode Lottie Preview",
   "description": "Preview Lottie in Visual Studio Code",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "publisher": "regchiu",
   "engines": {
     "vscode": "^1.85.0"
@@ -89,9 +89,9 @@
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^8.19.0",
     "@typescript-eslint/parser": "^8.19.0",
-    "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.8",
-    "@vscode/vsce": "^2.26.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.6.0",
     "commitizen": "^4.3.0",
     "esbuild": "^0.25.1",
     "eslint": "^9.17.0",

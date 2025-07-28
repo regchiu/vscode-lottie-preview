@@ -1,22 +1,27 @@
-.vscode/**
-.vscode-test/**
-src/**
-webview/src/**
 .gitignore
-.yarnrc
-**/tsconfig.json
-**/tsconfig.app.json
-**/tsconfig.node.json
-**/eslint.config.js
-**/*.map
-**/*.ts
-**/.vscode-test.*
+.lintstagedrc
+.nvmrc
+.prettierignore
+.vscode-test.mjs
 commitlint.config.mjs
-eslint.config.mjs
-**/postcss.config.js
-**/tailwind.config.js
+tsconfig.json
+.github/**
+.husky/**
+.vscode/**
+src/**
 esbuild.js
+eslint.config.mjs
+
+# media
+media/images/vscode-lottie-preview-feature-1.gif
+media/images/vscode-lottie-preview-feature-2.gif
 
 # webview-ui
-webview-ui/index.html
-webview-ui/src/**
+webview-ui/**
+!webview-ui/build/**
+
+# node_modules
+node_modules/**
+!node_modules/@dotlottie/dotlottie-js/**
+!node_modules/@dotlottie/player-component/**
+
